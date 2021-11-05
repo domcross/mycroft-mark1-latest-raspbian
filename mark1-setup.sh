@@ -12,6 +12,13 @@ wget http://ftp.debian.org/debian/pool/main/g/gdbm/libgdbm3_1.8.3-14_armhf.deb
 sudo dpkg -i libgdbm3_1.8.3-14_armhf.deb
 sudo apt-get install mycroft-core -y
 
+sudo echo "$(jq '. + {"enclosure": {"platform": "mycroft_mark_1","platform_build": 3,"port": "/dev/ttyAMA0","rate": 9600,"timeout": 5.0,"update": true,"test": false}}' /etc/mycroft/mycroft.conf)" >/etc/mycroft/mycroft.conf
+
+echo "$(jq '. + {"VolumeSkill": {"default_level": 6,"min_volume": 0,"max_volume": 83}}' /etc/mycroft/mycroft.conf)" > /etc/mycroft/mycroft.conf
+
+echo "$(jq '. + {"ipc_path": "/ramdisk/mycroft/ipc/"}' /etc/mycroft/mycroft.conf)" >/etc/mycroft/mycroft.conf
+
+
 # Enable ufw for a simple firewall allowing only port 22 incoming as well as dns, dhcp, and the Mycroft web socket
 sudo apt-get install ufw -y
 #Block all incoming by default
