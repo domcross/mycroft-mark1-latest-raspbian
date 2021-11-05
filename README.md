@@ -3,12 +3,11 @@ Recipe for setting up Mycroft Mark-1 with latest Raspbian OS version
 
 ## Install and Configure Base Raspbian Image
 
-* Use [Raspberry Pi Imager (v1.6.1 or later)](https://www.raspberrypi.com/software/) to burn 'Raspberry Pi OS Lite (32-bit)' to SD card:
-* after selection of OS image press Ctrl+Shift+X for extended options:
-* enable 'Hostname' and set it to 'mark_1'
-* enable 'SSH', set password for user 'pi' to 'mycroft'
-* enable 'Wifi' and set SSID, password and country accordingly
-* enable/disable 'telemetry' to your personal privacy preference ;-)
+* Use [Raspberry Pi Imager (v1.6.1 or later)](https://www.raspberrypi.com/software/) to burn 'Raspberry Pi OS Lite (32-bit)' to SD card <br/> after selection of OS image press Ctrl+Shift+X for extended options:
+	* enable 'Hostname' and set it to 'mark_1'
+	* enable 'SSH', set password for user 'pi' to 'mycroft'
+	* enable 'Wifi' and set SSID, password and country accordingly
+	* enable/disable 'telemetry' to your personal privacy preference ;-)
 * <code>sudo raspi-config</code> then select<br/>
 	* '1 Expand Filesystem'
 	* '3 Boot Options'
