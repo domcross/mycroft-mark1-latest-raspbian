@@ -12,7 +12,7 @@ wget http://ftp.debian.org/debian/pool/main/g/gdbm/libgdbm3_1.8.3-14_armhf.deb
 sudo dpkg -i libgdbm3_1.8.3-14_armhf.deb
 sudo apt-get install mycroft-core -y
 
-#Add initial config for platform detection
+echo '# Add initial config for platform detection'
 sudo mkdir -p /etc/mycroft
 sudo touch /etc/mycroft/mycroft.conf
 cp /etc/mycroft/mycroft.conf .
@@ -25,21 +25,21 @@ sudo rm /etc/mycroft/mycroft.conf && sudo cp mycroft.conf /etc/mycroft/
 # set default sample rate
 sudo sed -i 's/^; default-sample-rate = 44100/default-sample-rate = 44100/' /etc/pulse/daemon.conf 
 
-# Edit boot configuration settings in /boot/config.txt
-# Uncomment all of these to enable the optional hardware interfaces (about 10 lines from bottom)
+echo '# Edit boot configuration settings in /boot/config.txt'
+# Uncomment all of these to enable the optional hardware interfaces
 sudo sed -i 's/^#dtparam=i2c_arm=on/dtparam=i2c_arm=on/' /boot/config.txt
 sudo sed -i 's/^#dtparam=i2s=on/dtparam=i2s=on/' /boot/config.txt
 sudo sed -i 's/^#dtparam=spi=on/dtparam=spi=on/' /boot/config.txt
 # Comment out the following to disable audio (loads snd_bcm2835)
 sudo sed -i 's/^dtparam=audio=on/#dtparam=audio=on/' /boot/config.txt
 # Add the following lines at the bottom:
-sudo echo '# Disable Bluetooth, it interferes with serial port' >> /boot/config.txt
-sudo echo 'dtoverlay=pi3-disable-bt' >> /boot/config.txt
-sudo echo 'dtoverlay=pi3-miniuart-bt' >> /boot/config.txt
-sudo echo '# Enable Mark 1 soundcard drivers' >> /boot/config.txt
-sudo echo 'dtoverlay=rpi-proto' >> /boot/config.txt
+sudo bash -c 'echo "# Disable Bluetooth, it interferes with serial port" >> /boot/config.txt'
+sudo bash -c 'echo "dtoverlay=pi3-disable-bt" >> /boot/config.txt'
+sudo bash -c 'echo "dtoverlay=pi3-miniuart-bt" >> /boot/config.txt'
+sudo bash -c 'echo "# Enable Mark 1 soundcard drivers" >> /boot/config.txt'
+sudo bash -c 'echo "dtoverlay=rpi-proto" >> /boot/config.txt'
 
-# edit /boot/cmdline.txt
+echo '# edit /boot/cmdline.txt'
 # Make sure it contains no mention of ttyAMA0, as this is where the boot logging to serial would be enabled in the past.
 #Delete this option: 'console=serial0,115200'
 sudo sed -i 's/console=serial0,115200//' /boot/cmdline.txt
@@ -60,7 +60,7 @@ amixer -D hw:sndrpiproto sset 'Output Mixer HiFi' on
 #enable 'Store DC Offset'
 amixer -D hw:sndrpiproto sset 'Store DC Offset' on
 
-# Enable ufw for a simple firewall allowing only port 22 incoming as well as dns, dhcp, and the Mycroft web socket
+echo '# Enable ufw for a simple firewall allowing only port 22 incoming as well as dns, dhcp, and the Mycroft web socket'
 sudo apt-get install ufw -y
 #Block all incoming by default
 sudo ufw default deny incoming
@@ -77,24 +77,25 @@ sudo ufw allow in from 0.0.0.0 port 68 to 255.255.255.255 port 67 proto udp
 #Turn on the firewall
 sudo ufw enable
 
-#Disable kernel boot TTY on GPIO UART
+echo '# Disable kernel boot TTY on GPIO UART'
 sudo systemctl stop serial-getty@ttyAMA0.service
 sudo systemctl disable serial-getty@ttyAMA0.service
 
-#Enable systemd-timesyncd
+echo '# Enable systemd-timesyncd'
 sudo timedatectl set-ntp true
 
-#Upgrade all packages except raspberrypi-kernel
+echo '# Upgrade all packages except raspberrypi-kernel'
 sudo apt-get update
 echo "raspberrypi-kernel hold" | sudo dpkg --set-selections
 sudo apt-get upgrade -y
 
-# packagekit setup
+echo '# packagekit setup'
 sudo apt-get install packagekit -y
 
-#Install librespot
+echo '# Install librespot'
 curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
 #Then disable the raspotify service:
 sudo systemctl stop raspotify sudo systemctl disable raspotify
 
 sudo chown -R mycroft:mycroft /opt/mycroft/*
+echo '...done!'
