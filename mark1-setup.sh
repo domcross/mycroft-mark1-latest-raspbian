@@ -7,10 +7,17 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F3B1AA8B
 sudo bash -c 'echo "deb http://repo.mycroft.ai/repos/apt/debian debian main" > /etc/apt/sources.list.d/repo.mycroft.ai.list'
 sudo apt-get update
 
+echo '# Create RAM disk for IPC'
+sudo mkdir -p /ramdisk
+sudo bash -c 'echo "tmpfs /ramdisk tmpfs rw,nodev,nosuid,size=20M 0 0" >> /etc/fstab'
+
 # mycroft-python package has a dependency to libgdbm3 which is no longer distributed in current Raspbian OS (Buster)
 wget http://ftp.debian.org/debian/pool/main/g/gdbm/libgdbm3_1.8.3-14_armhf.deb
 sudo dpkg -i libgdbm3_1.8.3-14_armhf.deb
 sudo apt-get install mycroft-core -y
+
+echo 'rustup - for default skills'
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 echo '# Add initial config for platform detection'
 sudo mkdir -p /etc/mycroft
@@ -21,6 +28,10 @@ echo "$(jq '. + {"VolumeSkill": {"default_level": 6,"min_volume": 0,"max_volume"
 echo "$(jq '. + {"ipc_path": "/ramdisk/mycroft/ipc/"}' mycroft.conf)" > mycroft.conf
 sudo rm /etc/mycroft/mycroft.conf && sudo cp mycroft.conf /etc/mycroft/
 #rm mycroft.conf
+
+echo '# Allow mycroft user to install with pip'
+sudo bash -c 'echo "mycroft ALL=(ALL) NOPASSWD: /usr/local/bin/pip install *" > /etc/sudoers.d/011_mycroft-nopasswd'
+sudo chmod -w /etc/sudoers.d/011_mycroft-nopasswd
 
 # set default sample rate
 sudo sed -i 's/^; default-sample-rate = 44100/default-sample-rate = 44100/' /etc/pulse/daemon.conf 
@@ -75,7 +86,7 @@ sudo ufw allow in from 172.24.1.0/24 to any port 53 proto udp
 #Allow udp for dhcp
 sudo ufw allow in from 0.0.0.0 port 68 to 255.255.255.255 port 67 proto udp
 #Turn on the firewall
-sudo ufw enable
+sudo ufw --force enable
 
 echo '# Disable kernel boot TTY on GPIO UART'
 sudo systemctl stop serial-getty@ttyAMA0.service
@@ -98,4 +109,5 @@ curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
 sudo systemctl stop raspotify sudo systemctl disable raspotify
 
 sudo chown -R mycroft:mycroft /opt/mycroft/*
+
 echo '...done!'
