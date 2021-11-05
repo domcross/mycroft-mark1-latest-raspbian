@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 sudo apt-get update
-
 sudo apt-get install nano wget jq -y
-bash -c 'echo "alias ll='ls -l" >> /home/pi/.bashrc'
 sudo apt-get install apt-transport-https -y
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F3B1AA8B
 sudo bash -c 'echo "deb http://repo.mycroft.ai/repos/apt/debian debian main" > /etc/apt/sources.list.d/repo.mycroft.ai.list'
@@ -22,7 +20,7 @@ echo "$(jq '. + {"enclosure": {"platform": "mycroft_mark_1","platform_build": 3,
 echo "$(jq '. + {"VolumeSkill": {"default_level": 6,"min_volume": 0,"max_volume": 83}}' mycroft.conf)" > mycroft.conf
 echo "$(jq '. + {"ipc_path": "/ramdisk/mycroft/ipc/"}' mycroft.conf)" > mycroft.conf
 sudo rm /etc/mycroft/mycroft.conf && sudo cp mycroft.conf /etc/mycroft/
-rm mycroft.conf
+#rm mycroft.conf
 
 # set default sample rate
 sudo sed -i 's/^; default-sample-rate = 44100/default-sample-rate = 44100/' /etc/pulse/daemon.conf 
@@ -99,3 +97,4 @@ curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
 #Then disable the raspotify service:
 sudo systemctl stop raspotify sudo systemctl disable raspotify
 
+sudo chown -R mycroft:mycroft /opt/mycroft/*
