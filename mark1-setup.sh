@@ -11,31 +11,19 @@ echo '# Create RAM disk for IPC'
 sudo mkdir -p /ramdisk
 sudo bash -c 'echo "tmpfs /ramdisk tmpfs rw,nodev,nosuid,size=20M 0 0" >> /etc/fstab'
 
-# mycroft-python package has a dependency to libgdbm3 which is no longer distributed in current Raspbian OS (Buster)
-wget http://ftp.debian.org/debian/pool/main/g/gdbm/libgdbm3_1.8.3-14_armhf.deb
-sudo dpkg -i libgdbm3_1.8.3-14_armhf.deb
-sudo apt-get install mycroft-core -y
-
-echo 'rustup - for default skills'
+echo 'rustup - Rust is required for some default skills'
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-echo '# Add initial config for platform detection'
-sudo mkdir -p /etc/mycroft
-sudo touch /etc/mycroft/mycroft.conf
-cp /etc/mycroft/mycroft.conf .
-echo "$(jq '. + {"enclosure": {"platform": "mycroft_mark_1","platform_build": 3,"port": "/dev/ttyAMA0","rate": 9600,"timeout": 5.0,"update": true,"test": false}}' mycroft.conf)" > mycroft.conf
-echo "$(jq '. + {"VolumeSkill": {"default_level": 6,"min_volume": 0,"max_volume": 83}}' mycroft.conf)" > mycroft.conf
-echo "$(jq '. + {"ipc_path": "/ramdisk/mycroft/ipc/"}' mycroft.conf)" > mycroft.conf
-sudo rm /etc/mycroft/mycroft.conf && sudo cp mycroft.conf /etc/mycroft/
-#rm mycroft.conf
-
+echo '# packagekit setup'
+sudo apt-get install packagekit -y
 echo '# Allow mycroft user to install with pip'
 sudo bash -c 'echo "mycroft ALL=(ALL) NOPASSWD: /usr/local/bin/pip install *" > /etc/sudoers.d/011_mycroft-nopasswd'
 sudo chmod -w /etc/sudoers.d/011_mycroft-nopasswd
 
+echo '# instsall PulseAudio, ALSA config'
+sudo apt-get install pulseaudio alsa-utils 
 # set default sample rate
 sudo sed -i 's/^; default-sample-rate = 44100/default-sample-rate = 44100/' /etc/pulse/daemon.conf 
-
 echo '# Edit boot configuration settings in /boot/config.txt'
 # Uncomment all of these to enable the optional hardware interfaces
 sudo sed -i 's/^#dtparam=i2c_arm=on/dtparam=i2c_arm=on/' /boot/config.txt
@@ -100,14 +88,9 @@ sudo apt-get update
 echo "raspberrypi-kernel hold" | sudo dpkg --set-selections
 sudo apt-get upgrade -y
 
-echo '# packagekit setup'
-sudo apt-get install packagekit -y
-
 echo '# Install librespot'
 curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
 #Then disable the raspotify service:
 sudo systemctl stop raspotify sudo systemctl disable raspotify
 
-sudo chown -R mycroft:mycroft /opt/mycroft/*
-
-echo '...done!'
+echo '... please reboot, then continue with script "mark1-setup2.sh"'
