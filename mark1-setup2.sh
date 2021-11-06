@@ -31,3 +31,5 @@ sudo rm /etc/mycroft/mycroft.conf && sudo cp mycroft.conf /etc/mycroft/
 #rm mycroft.conf
 
 sudo chown -R mycroft:mycroft /opt/mycroft/*
+
+echo '...done!'
