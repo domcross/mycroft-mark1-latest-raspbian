@@ -2,6 +2,12 @@
 Recipe for setting up Mycroft Mark-1 with latest Raspbian OS version
 (loosely based on the [image-recipe](https://github.com/MycroftAI/enclosure-mark1/blob/master/image_recipe.md) from the [enclosure-mark1 repo](https://github.com/MycroftAI/enclosure-mark1)
 
+**tl;dr**
+1) flash SD card (see below), start Mark1 with SD card and connect via SSH
+2) run `curl -sSL https://raw.githubusercontent.com/domcross/mycroft-mark1-latest-raspbian/main/mark1-setup.sh | sh`
+3) reboot
+4) run `curl -sSL https://raw.githubusercontent.com/domcross/mycroft-mark1-latest-raspbian/main/mark1-setup2.sh | sh`
+5) pair Mark1 and have fun!
 
 ## Install and Configure Base Raspbian Image
 
