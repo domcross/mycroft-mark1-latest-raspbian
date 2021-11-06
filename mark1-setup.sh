@@ -43,22 +43,6 @@ echo '# edit /boot/cmdline.txt'
 #Delete this option: 'console=serial0,115200'
 sudo sed -i 's/console=serial0,115200//' /boot/cmdline.txt
 
-# Setup soundcard - set correct volume and sound card settings
-#Raise 'Master' volume to 46
-amixer -D hw:sndpriproto sset 'Master' 46%
-#enable 'Master Playback'
-amixer -D hw:sndrpiproto sset 'Master Playback ZC' on
-#enable 'Mic' 'Capture' 
-amixer -D hw:sndrpiproto cset iface=MIXER,name='Mic Capture Switch' on
-#enable 'Playback Deemp'
-amixer -D hw:sndpriproto sset 'Playback Deemphasis' on
-#set 'Input Mux' to 'Mic'
-amixer -D hw:sndpriproto sset 'Input Mux' 'Mic'
-#enable 'Output Mixer HiFi'
-amixer -D hw:sndrpiproto sset 'Output Mixer HiFi' on
-#enable 'Store DC Offset'
-amixer -D hw:sndrpiproto sset 'Store DC Offset' on
-
 echo '# Enable ufw for a simple firewall allowing only port 22 incoming as well as dns, dhcp, and the Mycroft web socket'
 sudo apt-get install ufw -y
 #Block all incoming by default
