@@ -1,3 +1,19 @@
+echo '# Setup soundcard - set correct volume and sound card settings'
+#Raise 'Master' volume to 46
+amixer -D hw:sndpriproto sset 'Master' 46%
+#enable 'Master Playback'
+amixer -D hw:sndrpiproto sset 'Master Playback ZC' on
+#enable 'Mic' 'Capture' 
+amixer -D hw:sndrpiproto cset iface=MIXER,name='Mic Capture Switch' on
+#enable 'Playback Deemp'
+amixer -D hw:sndpriproto sset 'Playback Deemphasis' on
+#set 'Input Mux' to 'Mic'
+amixer -D hw:sndpriproto sset 'Input Mux' 'Mic'
+#enable 'Output Mixer HiFi'
+amixer -D hw:sndrpiproto sset 'Output Mixer HiFi' on
+#enable 'Store DC Offset'
+amixer -D hw:sndrpiproto sset 'Store DC Offset' on
+
 echo '# install mycroft-core'
 # mycroft-python package has a dependency to libgdbm3 which is no longer distributed in current Raspbian OS (Buster)
 wget http://ftp.debian.org/debian/pool/main/g/gdbm/libgdbm3_1.8.3-14_armhf.deb
