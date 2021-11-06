@@ -75,6 +75,7 @@ sudo apt-get upgrade -y
 echo '# Install librespot'
 curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
 #Then disable the raspotify service:
-sudo systemctl stop raspotify sudo systemctl disable raspotify
+sudo systemctl stop raspotify 
+sudo systemctl disable raspotify
 
 echo '... please reboot, then continue with script "mark1-setup2.sh"'
