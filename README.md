@@ -1,5 +1,7 @@
 # mycroft-mark1-latest-raspbian
 Recipe for setting up Mycroft Mark-1 with latest Raspbian OS version
+(loosely based on the [image-recipe](https://github.com/MycroftAI/enclosure-mark1/blob/master/image_recipe.md) from the [enclosure-mark1 repo](https://github.com/MycroftAI/enclosure-mark1)
+
 
 ## Install and Configure Base Raspbian Image
 
