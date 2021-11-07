@@ -12,7 +12,7 @@ sudo mkdir -p /ramdisk
 sudo bash -c 'echo "tmpfs /ramdisk tmpfs rw,nodev,nosuid,size=20M 0 0" >> /etc/fstab'
 
 echo 'rustup - Rust is required for some default skills'
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly
 
 echo '# packagekit setup'
 sudo apt-get install packagekit -y
@@ -22,6 +22,8 @@ sudo chmod -w /etc/sudoers.d/011_mycroft-nopasswd
 
 echo '# instsall PulseAudio, ALSA config'
 sudo apt-get install pulseaudio alsa-utils 
+# anonymous auth for PA
+sudo sed -i 's/^load-module module-native-protocol-unix/load-module module-native-protocol-unix auth-anonymous=1/' /etc/pulse/system.pa 
 # set default sample rate
 sudo sed -i 's/^; default-sample-rate = 44100/default-sample-rate = 44100/' /etc/pulse/daemon.conf 
 echo '# Edit boot configuration settings in /boot/config.txt'
