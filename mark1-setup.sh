@@ -7,6 +7,9 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F3B1AA8B
 sudo bash -c 'echo "deb http://repo.mycroft.ai/repos/apt/debian debian main" > /etc/apt/sources.list.d/repo.mycroft.ai.list'
 sudo apt-get update
 
+echo '# install zram'
+sudo wget -q https://git.io/vM1kx -O /tmp/rpizram && bash /tmp/rpizram
+
 echo '# Create RAM disk for IPC'
 sudo mkdir -p /ramdisk
 sudo bash -c 'echo "tmpfs /ramdisk tmpfs rw,nodev,nosuid,size=20M 0 0" >> /etc/fstab'
@@ -20,7 +23,7 @@ echo '# Allow mycroft user to install with pip'
 sudo bash -c 'echo "mycroft ALL=(ALL) NOPASSWD: /usr/local/bin/pip install *" > /etc/sudoers.d/011_mycroft-nopasswd'
 sudo chmod -w /etc/sudoers.d/011_mycroft-nopasswd
 
-echo '# instsall PulseAudio, ALSA config'
+echo '# install PulseAudio, ALSA config'
 sudo apt-get install pulseaudio alsa-utils 
 # anonymous auth for PA
 sudo sed -i 's/^load-module module-native-protocol-unix/load-module module-native-protocol-unix auth-anonymous=1/' /etc/pulse/system.pa 
