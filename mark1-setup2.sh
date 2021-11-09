@@ -13,6 +13,7 @@ amixer -D hw:sndpriproto sset 'Input Mux' 'Mic'
 amixer -D hw:sndrpiproto sset 'Output Mixer HiFi' on
 #enable 'Store DC Offset'
 amixer -D hw:sndrpiproto sset 'Store DC Offset' on
+sudo alsactl store
 
 echo '# install mycroft-core'
 # mycroft-python package has a dependency to libgdbm3 which is no longer distributed in current Raspbian OS (Buster)
